@@ -113,4 +113,15 @@ public class Cat {
 		return name;
 	}
 
+	public int getSleep() {
+		return sleep;
+	}
+
+	public int getAwake() {
+		return awake;
+	}
+
+	public int getDigest() {
+		return digest;
+	}
 }
