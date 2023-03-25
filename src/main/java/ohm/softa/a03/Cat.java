@@ -3,16 +3,16 @@ package ohm.softa.a03;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static ohm.softa.a03.Cat.State.*;
-
 public class Cat {
 	private static final Logger logger = LogManager.getLogger();
 
-	// valid states
+	/*// valid states
 	public enum State {SLEEPING, HUNGRY, DIGESTING, PLAYFUL, DEAD}
 
 	// initially, animals are sleeping
-	private State state = State.SLEEPING;
+	private State state = State.SLEEPING;*/
+
+	private State state = new SleepingState(this);
 
 	// state durations (set via constructor), ie. the number of ticks in each state
 	private final int sleep;
@@ -21,8 +21,8 @@ public class Cat {
 
 	private final String name;
 
-	private int time = 0;
-	private int timeDigesting = 0;
+	//private int time = 0;
+	//private int timeDigesting = 0;
 
 	public Cat(String name, int sleep, int awake, int digest) {
 		this.name = name;
@@ -33,9 +33,8 @@ public class Cat {
 
 	public void tick(){
 		logger.info("tick()");
-		time = time + 1;
 
-		switch (state) {
+		/*switch (state) {
 			case SLEEPING:
 				if (time == sleep) {
 					logger.info("Yoan... getting hungry!");
@@ -70,8 +69,10 @@ public class Cat {
 				throw new IllegalStateException("Unknown cat state " + state.name());
 		}
 
-		logger.info(state.name());
 
+		logger.info(state.name());*/
+
+		this.state = state.tick(this);
 	}
 
 	/**
@@ -84,28 +85,34 @@ public class Cat {
 		logger.info("You feed the cat...");
 
 		// change state and reset the timer
-		state = State.DIGESTING;
-		timeDigesting = 0;
+		//state = State.DIGESTING;
+		state = new DigestingState(this);
+		//timeDigesting = 0;
 	}
 
 	public boolean isAsleep() {
-		return state.equals(State.SLEEPING);
+		//return state.equals(State.SLEEPING);
+		return state.getClass() == SleepingState.class;
 	}
 
 	public boolean isPlayful() {
-		return state.equals(State.PLAYFUL);
+		//return state.equals(State.PLAYFUL);
+		return state.getClass() == PlayfulState.class;
 	}
 
 	public boolean isHungry() {
-		return state.equals(State.HUNGRY);
+		//return state.equals(State.HUNGRY);
+		return state.getClass() == HungryState.class;
 	}
 
 	public boolean isDigesting() {
-		return state.equals(State.DIGESTING);
+		return state.getClass() == DigestingState.class;
+		// return state.equals(State.DIGESTING);
 	}
 
 	public boolean isDead() {
-		return state == State.DEAD;
+		return state.getClass() == DeathState.class;
+		// return state == State.DEAD;
 	}
 
 	@Override

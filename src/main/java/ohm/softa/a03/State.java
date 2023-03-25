@@ -8,8 +8,13 @@ public abstract class State {
     protected int time;
     protected final int duration;
 
+    public State(int duration) {
+        this.duration = duration;
+    }
+
     public final State tick(Cat cat) {
-        if (time > duration) {
+        time++;
+        if (time >= duration) {
             return successor(cat);
         }
         return this;
